@@ -1,4 +1,4 @@
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, PoisonPill, Props, Terminated}
+import akka.actor.{Actor, ActorRef, ActorSystem, PoisonPill, Props, Terminated}
 
 abstract class Msg
 
@@ -46,8 +46,7 @@ class Server extends Actor {
 
 }
 
-class Client(username: String, server: ActorRef) extends Actor with ActorLogging{
-  log.info(s"$username ---------")
+class Client(username: String, server: ActorRef) extends Actor {
   server ! Connect(username)
 
   override def receive: Receive = {
@@ -79,7 +78,9 @@ object BroadcastChat extends App {
   val server: ActorRef = system.actorOf(Props[Server], "Server")
 
   val client1 = system.actorOf(Client.props("amr", server), "Client1")
-  /*val client2: ActorRef = system.actorOf(Client.props("oby", server), "Client2")
+  Thread.sleep(500)
+
+  val client2: ActorRef = system.actorOf(Client.props("oby", server), "Client2")
 
   Thread.sleep(300)
 
@@ -100,5 +101,5 @@ object BroadcastChat extends App {
   client5 ! Send("TIN SOOB")
 
   Thread.sleep(300)
-  client3 ! Disconnect*/
+  client3 ! Disconnect
 }
